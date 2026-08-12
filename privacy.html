@@ -20,17 +20,26 @@
   .lang { margin-bottom:24px; }
   .lang a { color:var(--ink); text-decoration:none; border-bottom:2px solid var(--rule); padding-bottom:2px; }
   a { color:#7A5C9E; }
-  section[lang=en] { direction:ltr; text-align:left; display:none; }
+  section[lang=en] { direction:ltr; text-align:left; }
   section[lang=en] ul { padding-inline-start:22px; }
-  :target { display:block; }
-  body:has(#en:target) #he { display:none; }
+  /* Both halves are visible with no JavaScript, so the policy is always
+     readable. The script below hides one of them and wires the buttons. */
+  .lang { display:flex; gap:8px; margin-bottom:24px; }
+  .lang button { font:inherit; font-size:14px; cursor:pointer; padding:7px 16px;
+                 border:1px solid var(--rule); border-radius:999px;
+                 background:#fff; color:var(--muted); }
+  .lang button[aria-pressed=true] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .divider { height:1px; background:var(--rule); margin:56px 0; }
   footer { margin-top:48px; padding-top:20px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
 </style>
 </head>
 <body>
 <main>
 
-<div class="lang"><a href="#en">English</a></div>
+<div class="lang" hidden>
+  <button type="button" data-lang="he" aria-pressed="true">עברית</button>
+  <button type="button" data-lang="en" aria-pressed="false">English</button>
+</div>
 
 <section id="he" lang="he">
 <h1>מדיניות פרטיות</h1>
@@ -102,6 +111,8 @@
 
 <footer>צחי דרור · <a href="mailto:chincha4app@gmail.com">chincha4app@gmail.com</a></footer>
 </section>
+
+<div class="divider" id="divider"></div>
 
 <section id="en" lang="en">
 <h1>Privacy Policy</h1>
@@ -175,5 +186,50 @@ Privacy enquiries: <a href="mailto:chincha4app@gmail.com">chincha4app@gmail.com<
 </section>
 
 </main>
+
+<script>
+  // Progressive enhancement: without this both languages simply stack, which is
+  // a worse layout but never an unreadable page.
+  (function () {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+    var bar = document.querySelector('.lang')
+    var he = document.getElementById('he')
+    var en = document.getElementById('en')
+    var divider = document.getElementById('divider')
+    if (!bar || !he || !en) return
+
+    function show(lang) {
+      var english = lang === 'en'
+      he.hidden = english
+      en.hidden = !english
+      divider.hidden = true
+      document.documentElement.lang = lang
+      document.documentElement.dir = english ? 'ltr' : 'rtl'
+      bar.querySelectorAll('button').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang))
+      })
+      // Keeps the choice in the URL, so the English text can be linked to.
+      history.replaceState(null, '', english ? '#en' : '#he')
+      // Landing on #en scrolls the browser to that element, which lands you
+      // mid-document with the language buttons above the fold. Switching
+      // language should always show the top of what you switched to.
+      // Deferred: the browser performs its own scroll restoration after the
+      // script runs, so scrolling in the same tick is undone a moment later.
+      requestAnimationFrame(function () { window.scrollTo(0, 0) })
+    }
+
+    bar.hidden = false
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-lang]')
+      if (b) show(b.dataset.lang)
+    })
+
+    // Honour #en on first load, and follow the browser otherwise.
+    var initial = location.hash === '#en' ? 'en'
+      : location.hash === '#he' ? 'he'
+      : (navigator.language || 'he').slice(0, 2) === 'he' ? 'he' : 'en'
+    show(initial)
+  })()
+</script>
 </body>
 </html>

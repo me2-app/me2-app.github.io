@@ -82,10 +82,11 @@
 <h2>מספרי טלפון של אנשים שאינם משתמשים</h2>
 <p>כשמסמנים אדם שאין לו את האפליקציה, הוא מקבל הודעת SMS אנונימית. משמעות הדבר שאנחנו מחזיקים מספר טלפון של אדם שלא נרשם לשירות. זה הנתון הרגיש ביותר שאנחנו מטפלים בו, ואלה הכללים:</p>
 <ul>
-  <li>נשמר <strong>המספר בלבד</strong> — לא שם, לא איש הקשר, ולא מי סימן.</li>
+  <li>רשומת ההזמנה מכילה את <strong>מספר הנמען ואת סטטוס המסירה בלבד</strong>, ואינה מזהה מי גרם לה.</li>
+  <li>בנפרד, הסימון עצמו מקשר בין המסמן למספר שסומן — בלי זה אי אפשר לזהות הדדיות ואין מוצר. <strong>הנמען לעולם אינו רואה מי סימן אותו</strong>, אלא אם סימן בחזרה.</li>
   <li><strong>נמחק אוטומטית לאחר 90 יום</strong> אם לא נפתח חשבון.</li>
-  <li>תשובה <strong>"הסר"</strong> מוחקת את המספר <strong>מיידית וסופית</strong>, וחוסמת כל הודעה עתידית מכל משתמש שהוא.</li>
-  <li><strong>לכל היותר שלוש הודעות בסך הכול</strong> לאותו מספר — הראשונה מיד, השנייה כעבור שבועיים, השלישית כעבור חודש נוסף. אחריהן לא נשלחות עוד הודעות, גם אם אנשים נוספים סימנו את אותו אדם.</li>
+  <li>תשובה <strong>"הסר"</strong> מוחקת את הרשומה מיידית. המספר עצמו נשמר מאותו רגע <strong>אך ורק כרשומת חסימה</strong> — הדרך היחידה לוודא שאף הודעה עתידית, מאף משתמש, לא תגיע אליו. רשומה זו אינה נמחקת גם במחיקת חשבון.</li>
+  <li><strong>לכל היותר שלוש הודעות בסך הכול</strong> לאותו מספר — הראשונה מיד, השנייה כעבור שבועיים, השלישית כעבור חודש נוסף. אחריהן לא נשלחות עוד הודעות לעולם, גם אם אנשים נוספים סימנו את אותו אדם. סימונים נוספים ממתינים בשקט ויופיעו בתיבת הדואר אם אותו אדם יתקין את האפליקציה.</li>
   <li>ההודעות נשלחות ביוזמת משתמש שבחר אדם מסוים מאנשי הקשר שלו. אין באפליקציה דרך לשלוח הודעות אנונימיות חופשיות.</li>
   <li>ניתן לבקש מחיקה מיידית בכל עת בפנייה למייל שלמעלה, גם בלי להתקין את האפליקציה.</li>
 </ul>
@@ -116,7 +117,7 @@
 <tr><td style="padding:6px 0">תוצאות בדיקת תוכן</td><td>עד 12 חודשים, לצורך טיפול בדיווחים</td></tr>
 <tr><td style="padding:6px 0">רשומות רכישה</td><td>כנדרש בדין לצורכי חשבונאות ומס</td></tr>
 <tr><td style="padding:6px 0">לוגים תפעוליים</td><td>עד 30 יום</td></tr>
-<tr><td style="padding:6px 0">רשימת "הסר"</td><td>לצמיתות — כדי שלא יישלחו הודעות נוספות</td></tr>
+<tr><td style="padding:6px 0">רשימת "הסר"</td><td>לצמיתות, ובנפרד ממחיקת 90 היום — אחרת לא נדע שהמספר ביקש להסיר</td></tr>
 </table>
 <p>מידע שנמחק עשוי להישאר בגיבויים מוצפנים עד 30 יום נוספים לפני שיימחק סופית.</p>
 
@@ -175,10 +176,11 @@ Privacy enquiries: <a href="mailto:chincha4app@gmail.com">chincha4app@gmail.com<
 <h2>Phone numbers of people who are not users</h2>
 <p>When you mark someone who does not have the app, they receive an anonymous SMS. This means we hold a phone number belonging to someone who never signed up. It is the most sensitive data we handle, and these are the rules:</p>
 <ul>
-  <li>Only the <strong>number</strong> is kept — no name, no contact record, and no note of who marked them.</li>
+  <li>The invitation record holds <strong>only the recipient's number and delivery status</strong>, and does not identify who caused it.</li>
+  <li>Separately, the mark itself links the marker to the number marked — without that a mutual match cannot be recognised and there is no product. <strong>The recipient is never shown who marked them</strong>, unless they mark back.</li>
   <li><strong>Deleted automatically after 90 days</strong> if no account is created.</li>
-  <li>Replying <strong>STOP</strong> deletes the number <strong>immediately and permanently</strong> and blocks all future messages from any user.</li>
-  <li><strong>At most three messages in total</strong> to the same number — the first immediately, the second after two weeks, the third a month later. After that no further messages are sent, however many more people mark that person.</li>
+  <li>Replying <strong>STOP</strong> deletes the record immediately. From then on the number is kept <strong>solely as a suppression record</strong> — the only way to guarantee that no future message from any user reaches it. This record survives account deletion.</li>
+  <li><strong>At most three messages in total</strong> to any number — the first immediately, the second two weeks later, the third a month after that. Nothing further is ever sent, however many more people mark that person. Later marks wait quietly and appear in their inbox if they ever install the app.</li>
   <li>Messages are generated only when a user deliberately selects one specific contact. The app provides no way to send free-form anonymous messages.</li>
   <li>Immediate deletion can be requested at any time at the address above, without installing the app.</li>
 </ul>
@@ -209,7 +211,7 @@ Privacy enquiries: <a href="mailto:chincha4app@gmail.com">chincha4app@gmail.com<
 <tr><td style="padding:6px 0">Moderation results</td><td>Up to 12 months, to handle reports</td></tr>
 <tr><td style="padding:6px 0">Purchase records</td><td>As required by accounting and tax law</td></tr>
 <tr><td style="padding:6px 0">Operational logs</td><td>Up to 30 days</td></tr>
-<tr><td style="padding:6px 0">STOP list</td><td>Permanently, so that no further messages are sent</td></tr>
+<tr><td style="padding:6px 0">STOP list</td><td>Permanently, and separately from the 90-day deletion — otherwise we would not know the number had opted out</td></tr>
 </table>
 <p>Deleted data may remain in encrypted backups for up to 30 days before being permanently overwritten.</p>
 

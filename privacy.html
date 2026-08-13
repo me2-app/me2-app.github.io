@@ -20,15 +20,24 @@
   .lang { margin-bottom:24px; }
   .lang a { color:var(--ink); text-decoration:none; border-bottom:2px solid var(--rule); padding-bottom:2px; }
   a { color:#7A5C9E; }
+  /* The toggle works with CSS alone. IDs are used deliberately: #en is (1,0,0)
+     and #en:target is (1,1,0), so the :target rule wins. The first attempt used
+     section[lang=en] — (0,1,1) — which beat :target (0,1,0) and left the
+     English half hidden however you linked to it. */
+  #en { display:none; }
+  #en:target { display:block; }
+  body:has(#en:target) #he { display:none; }
+  body:has(#en:target) .divider { display:none; }
+  body:has(#en:target) a[href="#en"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  body:not(:has(#en:target)) a[href="#he"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
   section[lang=en] { direction:ltr; text-align:left; }
   section[lang=en] ul { padding-inline-start:22px; }
   /* Both halves are visible with no JavaScript, so the policy is always
      readable. The script below hides one of them and wires the buttons. */
   .lang { display:flex; gap:8px; margin-bottom:24px; }
-  .lang button { font:inherit; font-size:14px; cursor:pointer; padding:7px 16px;
-                 border:1px solid var(--rule); border-radius:999px;
-                 background:#fff; color:var(--muted); }
-  .lang button[aria-pressed=true] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .lang a { font-size:14px; cursor:pointer; padding:7px 16px; text-decoration:none;
+            border:1px solid var(--rule); border-radius:999px;
+            background:#fff; color:var(--muted); display:inline-block; }
   .divider { height:1px; background:var(--rule); margin:56px 0; }
   footer { margin-top:48px; padding-top:20px; border-top:1px solid var(--rule); color:var(--muted); font-size:14px; }
 </style>
@@ -36,9 +45,9 @@
 <body>
 <main>
 
-<div class="lang" hidden>
-  <button type="button" data-lang="he" aria-pressed="true">עברית</button>
-  <button type="button" data-lang="en" aria-pressed="false">English</button>
+<div class="lang">
+  <a href="#he">עברית</a>
+  <a href="#en">English</a>
 </div>
 
 <section id="he" lang="he">
@@ -188,47 +197,27 @@ Privacy enquiries: <a href="mailto:chincha4app@gmail.com">chincha4app@gmail.com<
 </main>
 
 <script>
-  // Progressive enhancement: without this both languages simply stack, which is
-  // a worse layout but never an unreadable page.
+  // Everything above already works with CSS alone. This only adds the two
+  // niceties CSS cannot do: flipping the document direction, and opening in the
+  // reader's own language. If it fails or is blocked, the links still work.
   (function () {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
-    var bar = document.querySelector('.lang')
-    var he = document.getElementById('he')
-    var en = document.getElementById('en')
-    var divider = document.getElementById('divider')
-    if (!bar || !he || !en) return
 
-    function show(lang) {
-      var english = lang === 'en'
-      he.hidden = english
-      en.hidden = !english
-      divider.hidden = true
-      document.documentElement.lang = lang
+    function sync() {
+      var english = location.hash === '#en'
+      document.documentElement.lang = english ? 'en' : 'he'
       document.documentElement.dir = english ? 'ltr' : 'rtl'
-      bar.querySelectorAll('button').forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.dataset.lang === lang))
-      })
-      // Keeps the choice in the URL, so the English text can be linked to.
-      history.replaceState(null, '', english ? '#en' : '#he')
-      // Landing on #en scrolls the browser to that element, which lands you
-      // mid-document with the language buttons above the fold. Switching
-      // language should always show the top of what you switched to.
-      // Deferred: the browser performs its own scroll restoration after the
-      // script runs, so scrolling in the same tick is undone a moment later.
       requestAnimationFrame(function () { window.scrollTo(0, 0) })
     }
 
-    bar.hidden = false
-    bar.addEventListener('click', function (e) {
-      var b = e.target.closest('button[data-lang]')
-      if (b) show(b.dataset.lang)
-    })
+    window.addEventListener('hashchange', sync)
 
-    // Honour #en on first load, and follow the browser otherwise.
-    var initial = location.hash === '#en' ? 'en'
-      : location.hash === '#he' ? 'he'
-      : (navigator.language || 'he').slice(0, 2) === 'he' ? 'he' : 'en'
-    show(initial)
+    // First visit with no hash: follow the browser's language.
+    if (!location.hash) {
+      var wantsHebrew = (navigator.language || 'he').slice(0, 2) === 'he'
+      location.replace(wantsHebrew ? '#he' : '#en')
+    }
+    sync()
   })()
 </script>
 </body>
